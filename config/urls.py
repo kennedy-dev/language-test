@@ -2,11 +2,14 @@ from django.conf import settings
 from django.urls import include, path
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.views import defaults as default_views
+from testapp.views import TestPage
+
 
 urlpatterns = [
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    path("", RedirectView.as_view(url="/accounts/login/"), name="home"),
+    path("tests/", TestPage.as_view(), name="test"),
     path(
         "about/",
         TemplateView.as_view(template_name="pages/about.html"),
