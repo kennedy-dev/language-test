@@ -13,19 +13,22 @@
         <p id="profile-name" class="profile-name-card"></p>
         <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
              {% csrf_token %}
-            <span id="reauth-email" class="reauth-email"></span>
 
-            <input type="text" name="username" placeholder="Username" autofocus="autofocus"
-                   minlength="1" maxlength="150" class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_username">
+            <input type="text" name="username" placeholder="Username"
+                     class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_username">
+
+            <input type="text" name="name" placeholder="Name"
+                     class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_name">
 
             <input type="email" name="email" placeholder="E-mail address"
                    class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_email">
 
+
+            <input type="tel" name="phone" placeholder="Phone"
+                     class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_phone">
+
             <input type="password" name="password1" placeholder="Password"
                    class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_password1">
-
-            <input type="password" name="password2" placeholder="Password (again)"
-                     class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_password2">
 
             {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
