@@ -70,6 +70,7 @@ THIRD_PARTY_APPS = [
 ]
 LOCAL_APPS = [
     'language.users.apps.UsersAppConfig',
+    'language.helpers',
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -271,3 +272,4 @@ SOCIALACCOUNT_ADAPTER = 'language.users.adapters.SocialAccountAdapter'
 # ------------------------------------------------------------------------------
 LOGIN_REDIRECT_URL = '/tests/'
 ACCOUNT_LOGOUT_ON_GET = True
+

@@ -1,23 +1,24 @@
-from django.contrib.auth import get_user_model, forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth import forms as authforms
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-
+from django import forms
 User = get_user_model()
 
 
-class UserChangeForm(forms.UserChangeForm):
+class UserChangeForm(authforms.UserChangeForm):
 
-    class Meta(forms.UserChangeForm.Meta):
+    class Meta(authforms.UserChangeForm.Meta):
         model = User
 
 
-class UserCreationForm(forms.UserCreationForm):
+class UserCreationForm(authforms.UserCreationForm):
 
-    error_message = forms.UserCreationForm.error_messages.update(
+    error_message = authforms.UserCreationForm.error_messages.update(
         {"duplicate_username": _("This username has already been taken.")}
     )
 
-    class Meta(forms.UserCreationForm.Meta):
+    class Meta(authforms.UserCreationForm.Meta):
         model = User
 
     def clean_username(self):
@@ -29,3 +30,13 @@ class UserCreationForm(forms.UserCreationForm):
             return username
 
         raise ValidationError(self.error_messages["duplicate_username"])
+
+
+class SignUpForm(UserCreationForm):
+    name = forms.CharField(help_text='Name')
+    email = forms.CharField(help_text='Email')
+    phone = forms.CharField(help_text='Phone')
+
+    class Meta:
+        model = User
+        fields = ('username', 'name', 'email', 'phone', 'password1', 'password2', )

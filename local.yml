@@ -32,6 +32,13 @@ services:
     env_file:
       - ./.envs/.local/.postgres
 
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
   redis:
     image: redis:3.2
 

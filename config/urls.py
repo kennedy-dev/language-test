@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.views.generic import TemplateView, RedirectView
 from django.views import defaults as default_views
 from testapp.views import TestPage
-
+from language.users.views import user_create_view
 
 urlpatterns = [
     path("", RedirectView.as_view(url="/accounts/login/"), name="home"),
@@ -22,6 +22,7 @@ urlpatterns = [
         "users/",
         include("language.users.urls", namespace="users"),
     ),
+    path("accounts/signup/", view=user_create_view, name="signup"),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(

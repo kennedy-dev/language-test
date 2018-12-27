@@ -15,40 +15,62 @@
              {% csrf_token %}
 
             <input type="text" name="username" placeholder="Username"
-                     class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_username">
-
+                     class="textinput textInput form-control"
+                   value="{% if form.username.value %} {{ form.username.value }} {% endif %}"
+                   style="margin-bottom: 5px" required="" id="id_username">
+            {% if form.errors.username %}
+                <div class="alert alert-danger">
+                    <strong>{{ form.errors.username|escape }}</strong>
+                </div>
+            {% endif %}
             <input type="text" name="name" placeholder="Name"
+                   value="{% if form.name.value %} {{ form.name.value }} {% endif %}"
                      class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_name">
+            {% if form.errors.name %}
+                <div class="alert alert-danger">
+                    <strong>{{ form.errors.name|escape }}</strong>
+                </div>
+            {% endif %}
 
             <input type="email" name="email" placeholder="E-mail address"
+                   value="{% if form.email.value %} {{ form.email.value }} {%  endif %}"
                    class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_email">
 
-
+              {% if form.errors.email %}
+                <div class="alert alert-danger">
+                    <strong>{{ form.errors.email|escape }}</strong>
+                </div>
+            {% endif %}
             <input type="tel" name="phone" placeholder="Phone"
+                   value="{% if form.phone.value %} {{ form.phone.value }} {% endif %}"
                      class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_phone">
-
+            {% if form.errors.phone %}
+                <div class="alert alert-danger">
+                    <strong>{{ form.errors.phone|escape }}</strong>
+                </div>
+            {% endif %}
             <input type="password" name="password1" placeholder="Password"
+                   value="{% if form.password1.value %} {{ form.password1.value }} {% endif %}"
                    class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_password1">
-
+            {% if form.errors.password1 %}
+                <div class="alert alert-danger">
+                    <strong>{{ form.errors.password1|escape }}</strong>
+                </div>
+            {% endif %}
+            <input type="password" name="password2" placeholder="Password Again"
+                   value="{% if form.password2.value %}{{ form.password2.value }}{% endif %}"
+                   class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_password2">
+            {% if form.errors.password2 %}
+                <div class="alert alert-danger">
+                    <strong>{{ form.errors.password2|escape }}</strong>
+                </div>
+            {% endif %}
             {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
             {% endif %}
             <button class="btn btn-lg btn-primary btn-block btn-signin" style="margin-top: 40px; margin-bottom: 10px;" type="submit">Sign up</button>
         </form><!-- /form -->
-        {% if form.errors %}
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <div class="alert alert-danger">
-                        <strong>{{ error|escape }}</strong>
-                    </div>
-                {% endfor %}
-            {% endfor %}
-            {% for error in form.non_field_errors %}
-                <div class="alert alert-danger">
-                    {{ error|escape }}
-                </div>
-            {% endfor %}
-        {% endif %}
+
     </div><!-- /card-container -->
 </div><!-- /container -->
 
