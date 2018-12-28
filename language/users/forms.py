@@ -35,8 +35,7 @@ class UserCreationForm(authforms.UserCreationForm):
 class SignUpForm(UserCreationForm):
     name = forms.CharField(help_text='Name')
     email = forms.CharField(help_text='Email')
-    phone = forms.CharField(help_text='Phone')
 
     class Meta:
         model = User
-        fields = ('username', 'name', 'email', 'phone', 'password1', 'password2', )
+        fields = ('username', 'name', 'email', 'password1', 'password2', )

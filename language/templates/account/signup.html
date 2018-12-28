@@ -14,52 +14,52 @@
         <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
              {% csrf_token %}
 
-            <input type="text" name="username" placeholder="Username"
+              Username:
+              <input type="text" name="username" placeholder="Enter a username"
                      class="textinput textInput form-control"
                    value="{% if form.username.value %} {{ form.username.value }} {% endif %}"
-                   style="margin-bottom: 5px" required="" id="id_username">
-            {% if form.errors.username %}
-                <div class="alert alert-danger">
-                    {{ form.errors.username|escape }}
-                </div>
-            {% endif %}
-            <input type="text" name="name" placeholder="Name"
+                   style="margin-bottom: 9px; margin-top: 4px;;" required="" id="id_username">
+              {% if form.errors.username %}
+                  <div class="alert alert-danger">
+                      {{ form.errors.username|escape }}
+                  </div>
+              {% endif %}
+
+            Name:
+            <input type="text" name="name" placeholder="Enter your name"
                    value="{% if form.name.value %} {{ form.name.value }} {% endif %}"
-                     class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_name">
+                     class="textinput textInput form-control" style="margin-bottom: 9px; margin-top: 4px;;" required="" id="id_name">
             {% if form.errors.name %}
                 <div class="alert alert-danger">
                     {{ form.errors.name|escape }}
                 </div>
             {% endif %}
 
-            <input type="email" name="email" placeholder="E-mail address"
+            Email:
+            <input type="email" name="email" placeholder="Emter your email"
                    value="{% if form.email.value %} {{ form.email.value }} {%  endif %}"
-                   class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_email">
+                   class="textinput textInput form-control" style="margin-bottom: 9px; margin-top: 4px;;" required="" id="id_email">
 
               {% if form.errors.email %}
                 <div class="alert alert-danger">
                     {{ form.errors.email|escape }}
                 </div>
             {% endif %}
-            <input type="tel" name="phone" placeholder="Phone"
-                   value="{% if form.phone.value %} {{ form.phone.value }} {% endif %}"
-                     class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_phone">
-            {% if form.errors.phone %}
-                <div class="alert alert-danger">
-                    {{ form.errors.phone|escape }}
-                </div>
-            {% endif %}
-            <input type="password" name="password1" placeholder="Password"
+
+            Password:
+            <input type="password" name="password1" placeholder="Enter password"
                    value="{% if form.password1.value %} {{ form.password1.value }} {% endif %}"
-                   class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_password1">
+                   class="textinput textInput form-control" style="margin-bottom: 9px; margin-top: 4px;;" required="" id="id_password1">
             {% if form.errors.password1 %}
                 <div class="alert alert-danger">
                     {{ form.errors.password1|escape }}
                 </div>
             {% endif %}
-            <input type="password" name="password2" placeholder="Password Again"
+
+            Password Again
+            <input type="password" name="password2" placeholder="Enter password again"
                    value="{% if form.password2.value %}{{ form.password2.value }}{% endif %}"
-                   class="textinput textInput form-control" style="margin-bottom: 5px" required="" id="id_password2">
+                   class="textinput textInput form-control" style="margin-bottom: 9px; margin-top: 4px;;" required="" id="id_password2">
             {% if form.errors.password2 %}
                 <div class="alert alert-danger">
                     {{ form.errors.password2|escape }}
