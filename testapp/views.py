@@ -94,7 +94,7 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         else:
             lessons = {}
 
-        lessons[lessonid] = data.read()
+        lessons[lessonid] = complete_name
 
         mdb.update_data(
             collection_name="users",
