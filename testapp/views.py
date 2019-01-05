@@ -44,12 +44,10 @@ class RecordPage(LoginRequiredMixin, TemplateView):
             except:
                 lessons = None
 
-        print("keys", lessons.keys())
         all_unattended_lessons = []
         if lessons:
             for each_lesson in alllessons:
                 if str(each_lesson.id) not in list(lessons.keys()):
-                    print(each_lesson.id)
                     all_unattended_lessons.append(each_lesson)
         else:
             all_unattended_lessons = list(alllessons)
