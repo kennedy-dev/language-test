@@ -86,8 +86,11 @@ class RecordPage(LoginRequiredMixin, TemplateView):
 
         user_data = mdb.find_one(collection_name="users", condition=update_condition)
 
-        if user_data and user_data['lessons']:
-            lessons = user_data['lessons']
+        if user_data:
+            try:
+                lessons = user_data['lessons']
+            except:
+                lessons = {}
         else:
             lessons = {}
 
