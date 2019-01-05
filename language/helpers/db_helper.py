@@ -76,20 +76,20 @@ class MongoDBConnect(object):
             print(str(e))
             # print("pymongo.errors.WriteError: can't map file memory - mongo requires 64 bit build for larger datasets")
 
-    def update_data(self, collection_name="item", update_condition={}, update_data={}):
+    def update_data(self, collection_name="item", update_condition={}, update_data={}, upsert=False):
         """Create a new schema request."""
         return self.db[collection_name].update_one(
             update_condition,
             {"$set": update_data},
-            upsert=False
+            upsert=upsert
         )
 
-    def update_many_data(self, collection_name="item", update_condition={}, update_data={}):
+    def update_many_data(self, collection_name="item", update_condition={}, update_data={}, upsert=False):
         """Create a new schema request."""
         updated = self.db[collection_name].update_many(
             update_condition,
             {"$set": update_data},
-            upsert=False
+            upsert=upsert
         )
         return updated
 

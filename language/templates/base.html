@@ -26,7 +26,11 @@
     <!-- This file stores project-specific CSS -->
 
     <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    <link href="{% static 'css/auth.css' %}" rel="stylesheet">
+      {% if 'account' in request.path %}
+        <link href="{% static 'css/auth.css' %}" rel="stylesheet">
+      {% else %}
+        <link href="{% static 'css/record.css' %}" rel="stylesheet">
+      {% endif %}
 
     {% endblock %}
 
@@ -74,7 +78,7 @@
 
     </div>
 
-    <div class="container">
+    <div class=".container-fluid">
 
       {% block content %}
         <p>Use this document as a way to quick start any new project.</p>
@@ -98,9 +102,13 @@
 
 
       <!-- place project specific Javascript in this file -->
-
+      <script type="text/javascript">
+          var csrf = '{{ csrf_token }}';
+          var lessonid = '{{ lessonid }}';
+      </script>
       <script src="{% static 'js/project.js' %}"></script>
-
+      <script src="{% static 'js/recorder.js' %}"></script>
+      <script src="{% static 'js/app.js' %}"></script>
 
     {% endblock javascript %}
   </body>

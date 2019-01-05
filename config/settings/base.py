@@ -65,12 +65,13 @@ THIRD_PARTY_APPS = [
     'crispy_forms',
     'allauth',
     'allauth.account',
-    'allauth.socialaccount',
+    # 'allauth.socialaccount',
     'rest_framework',
 ]
 LOCAL_APPS = [
     'language.users.apps.UsersAppConfig',
     'language.helpers',
+    'testapp',
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -270,6 +271,6 @@ SOCIALACCOUNT_ADAPTER = 'language.users.adapters.SocialAccountAdapter'
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-LOGIN_REDIRECT_URL = '/tests/'
+LOGIN_REDIRECT_URL = '/record/'
 ACCOUNT_LOGOUT_ON_GET = True
 

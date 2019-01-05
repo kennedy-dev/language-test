@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+
+  <div class="col" >
+    <div class="card" style="margin: 10px; min-height: 300px">
+      <div class="card-body">
+        <h5 class="card-title" style="text-align: center">{{ lessons.0.title }}</h5>
+        {{ lessons.0.text_to_read }}
+      </div>
+    </div>
+
+  </div>
+  <div class="col-sm-3" style="">
+
+    <div class="card"
+         style="margin-right: 6px; margin-left: -25px; margin-top: 15px; min-height: 300px">
+      <div class="card-body">
+        <div class="row"  id="controls">
+           <button id="recordButton">Record</button>
+           <button id="pauseButton" disabled>Pause</button>
+           <button id="stopButton" disabled>Stop</button>
+
+        <div id="formats" ></div>
+        <h5 class="card-title" style="text-align: center; margin-top: 10px;">Recordings</h5>
+        <ol id="recordingsList" style="margin-left: -37px;"></ol>
+        <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock content %}
+
+
