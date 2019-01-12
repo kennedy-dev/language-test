@@ -56,7 +56,7 @@ class RecordPage(LoginRequiredMixin, TemplateView):
             all_unattended_lessons = list(alllessons)
 
         all_recordings = []
-        if 'lessons' not in user_data.keys():
+        if user_data and 'lessons' not in user_data.keys():
             user_data['lessons'] = {}
 
         for each_recording in user_data['lessons']:
