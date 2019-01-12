@@ -14,11 +14,17 @@ class LanguageAdmin(admin.ModelAdmin):
         "__str__", "created",
     )
 
+admin.site.register(Book)
+admin.site.register(Chapter)
+admin.site.register(Verse)
+
 admin.site.register(Lesson)
 
 
 from django.contrib.auth.models import Group
+from allauth.account.models import EmailAddress
 from django.contrib.sites.models import Site
 
 admin.site.unregister(Group)
 admin.site.unregister(Site)
+admin.site.unregister(EmailAddress)

@@ -10,6 +10,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 import os
 from language.helpers.db_helper import MongoDBConnect
 from django.http import JsonResponse
+from django.conf import settings
+
 
 class RecordSuccessPage(LoginRequiredMixin, TemplateView):
     template_name = 'pages/success.html'
@@ -19,6 +21,7 @@ class RecordSuccessPage(LoginRequiredMixin, TemplateView):
         context = {}
 
         return render(request, self.template_name, context)
+
 
 class RecordPage(LoginRequiredMixin, TemplateView):
 
@@ -52,14 +55,34 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         else:
             all_unattended_lessons = list(alllessons)
 
-        if len(all_unattended_lessons) == 0:
-            return HttpResponseRedirect('/success/')
+        all_recordings = []
+        if 'lessons' not in user_data.keys():
+            user_data['lessons'] = {}
 
-        context = {
+        for each_recording in user_data['lessons']:
+            data = {
+                'id': each_recording,
+                'lessonname': user_data['lessons']['name'],
+                'path': user_data['lessons'][each_recording]
+            }
+            try:
+                data['name'] = user_data['lessons'][each_recording]['name'] + '.wav'
+            except:
+                data['name'] = str(each_recording) + '.wav'
+
+            all_recordings.append(data)
+
+        context={
             'lessons': all_unattended_lessons,
-            'lessonid': all_unattended_lessons[0].id,
-            'total_lessions': alllessons.count()
+            'total_lessions': alllessons.count(),
+            'all_recordings': all_recordings
         }
+
+
+        if len(all_unattended_lessons) == 0:
+            context['success'] = True
+        else:
+            context['lessonid'] = all_unattended_lessons[0].id
 
         return render(request, self.template_name, context)
 
@@ -67,14 +90,17 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         """Method to select record page."""
         data = request.FILES['audio_data']
         lessonid = request.POST['lessonid']
-        name_of_file = request.FILES['audio_data'].name
-        complete_name = os.path.join('/home/userdata/' + str(request.user.id), name_of_file + ".wav")
+        lesson = Lesson.objects.get(id=lessonid)
 
-        if not os.path.exists('/home/userdata/'+ str(request.user.id)):
-            os.makedirs('/home/userdata/'+ str(request.user.id))
+        complete_name = os.path.join(settings.MEDIA_ROOT + '/userdata/' + str(request.user.id) + '/' + str(lessonid) + ".wav")
+        print(complete_name)
 
-        file = open(complete_name, "w")
-        file.write(complete_name)
+        path = settings.MEDIA_ROOT + '/userdata/'+ str(request.user.id)
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        file = open(complete_name, "wb")
+        file.write(data.read())
         file.close()
 
         mdb = MongoDBConnect(db_name='language', username="root", password="root")
@@ -94,7 +120,8 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         else:
             lessons = {}
 
-        lessons[lessonid] = complete_name
+        lessons[lessonid] = lessonid
+        lessons['name'] = str(lesson)
 
         mdb.update_data(
             collection_name="users",

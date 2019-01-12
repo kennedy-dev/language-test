@@ -3,12 +3,43 @@
 {% block content %}
 
 <div class="row">
+  <div class="col-sm-3" style="margin-left: 32px">
+      <div class="card"
+       style="margin-right: 6px; margin-left: -25px; margin-top: 15px; min-height: 300px">
+        <div class="card-body">
+              <h5 class="card-title" style="text-align: center; margin-top: 10px;">My Recordings</h5>
+            {% if all_recordings %}
+            <ol id="myrecordings" style="margin-left: -60px; margin-top: 20px;">
 
-  <div class="col" >
-    <div class="card" style="margin: 10px; min-height: 400px">
+                {% for each_recording in all_recordings %}
+                  <li>
+                    <span style="margin-bottom: 5px;">
+                      {{ each_recording.lessonname }}  <span class="glyphicon glyphicon-ok" style="color: green"></span>
+                    </span>
+                    <audio controls="" src="/media/userdata/{{ request.user.id }}/{{ each_recording.name }}">
+                    </audio>
+                  </li>
+                {% endfor %}
+              </ol>
+              {% else %}
+                You have no recordings yet.
+            {% endif %}
+
+        </div>
+      </div>
+  </div>
+
+  <div class="col" style="margin-left: -30px" >
+    <div class="card" style="margin: 15px; min-height: 400px">
       <div class="card-body">
-        <h5 class="card-title" style="text-align: center">{{ lessons.0.title }}</h5>
-        {{ lessons.0.text_to_read }}
+        {%  if success %}
+
+            Congratulations!! You have successfully completed all the test.
+          {% else %}
+            <h5 class="card-title" style="text-align: center">{{ lessons.0 }}</h5>
+            {{ lessons.0.text_to_read }}
+
+        {% endif %}
       </div>
     </div>
 
@@ -19,13 +50,13 @@
          style="margin-right: 6px; margin-left: -25px; margin-top: 15px; min-height: 300px">
       <div class="card-body">
         <div class="row"  id="controls">
-           <button id="recordButton">Record</button>
-           <button id="pauseButton" disabled>Pause</button>
-           <button id="stopButton" disabled>Stop</button>
+          <button id="pauseButton" disabled>Discard</button>
+          <button id="recordButton"{%  if success %} disabled{% endif %}>Record</button>
+          <button id="stopButton" disabled>Save</button>
 
         <div id="formats" ></div>
-        <h5 class="card-title" style="text-align: center; margin-top: 10px;">Recordings</h5>
-        <ol id="recordingsList" style="margin-left: -37px;"></ol>
+
+        <ol id="recordingsList" style="margin-left: -37px; margin-top: 20px;"></ol>
         <!-- inserting these scripts at the end to be able to use all the elements in the DOM -->
         </div>
       </div>

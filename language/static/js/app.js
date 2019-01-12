@@ -1,6 +1,7 @@
 //webkitURL is deprecated but nevertheless
 URL = window.URL || window.webkitURL;
 
+
 var gumStream; 						//stream from getUserMedia()
 var rec; 							//Recorder.js object
 var input; 							//MediaStreamAudioSourceNode we'll be recording
@@ -12,11 +13,33 @@ var audioContext //audio context to help us record
 var recordButton = document.getElementById("recordButton");
 var stopButton = document.getElementById("stopButton");
 var pauseButton = document.getElementById("pauseButton");
+var ispaused = false;
+var isrecording = false;
 
 //add events to those 2 buttons
 recordButton.addEventListener("click", startRecording);
 stopButton.addEventListener("click", stopRecording);
-pauseButton.addEventListener("click", pauseRecording);
+pauseButton.addEventListener("click", clearRecording);
+
+
+function clearRecording() {
+    console.log("Clear Recording");
+    if (isrecording || ispaused){
+        rec.stop();
+        rec.clear();
+
+        recordButton.disabled = false;
+        stopButton.disabled = true;
+        pauseButton.disabled = false;
+
+        recordButton.innerHTML="Record";
+
+        isrecording = false;
+        ispaused = false;
+        recordingsList.innerHTML = '';
+
+    }
+}
 
 function startRecording() {
 	console.log("recordButton clicked");
@@ -27,14 +50,20 @@ function startRecording() {
 	*/
 
     var constraints = { audio: true, video:false }
-
- 	/*
+    /*
     	Disable the record button until we get a success or fail from getUserMedia()
 	*/
+ 	if (isrecording || ispaused){
+        pauseRecording();
+        return;
+    }
+    recordButton.innerHTML="Pause";
+    ispaused = false;
+    isrecording = true;
 
-	recordButton.disabled = true;
+	recordButton.disabled = false;
 	stopButton.disabled = false;
-	pauseButton.disabled = false
+	pauseButton.disabled = false;
 
 	/*
     	We're using the standard promise based getUserMedia()
@@ -74,9 +103,9 @@ function startRecording() {
 
 	}).catch(function(err) {
 	  	//enable the record button if getUserMedia() fails
-    	recordButton.disabled = false;
+    	recordButton.disabled = true;
     	stopButton.disabled = true;
-    	pauseButton.disabled = true
+    	pauseButton.disabled = false;
 	});
 }
 
@@ -85,12 +114,16 @@ function pauseRecording(){
 	if (rec.recording){
 		//pause
 		rec.stop();
-		pauseButton.innerHTML="Resume";
+		recordButton.innerHTML="Resume";
+		ispaused = true;
+		isrecording=false;
+
 	}else{
 		//resume
-		rec.record()
-		pauseButton.innerHTML="Pause";
-
+		rec.record();
+		recordButton.innerHTML="Pause";
+		ispaused = false;
+		isrecording=true;
 	}
 }
 
@@ -100,10 +133,10 @@ function stopRecording() {
 	//disable the stop button, enable the record too allow for new recordings
 	stopButton.disabled = true;
 	recordButton.disabled = true;
-	pauseButton.disabled = true;
+	pauseButton.disabled = false;
 
 	//reset button just in case the recording is stopped while paused
-	pauseButton.innerHTML="Pause";
+	pauseButton.innerHTML="Discard";
 
 	//tell the recorder to stop the recording
 	rec.stop();
