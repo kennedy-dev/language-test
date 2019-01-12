@@ -22,8 +22,6 @@ class Language(models.Model):
 
 
 class Book(models.Model):
-    language = models.ForeignKey('Language', on_delete=models.CASCADE)
-
     title = models.CharField(max_length=200)
 
     created = models.DateTimeField(auto_now_add=True)
@@ -75,6 +73,7 @@ class Verse(models.Model):
 
 
 class Lesson(models.Model):
+    language = models.ForeignKey('Language', on_delete=models.CASCADE)
     book = models.ForeignKey('Book', on_delete=models.CASCADE)
     chapter = models.ForeignKey('Chapter', on_delete=models.CASCADE)
     verse = models.ForeignKey('Verse', on_delete=models.CASCADE)
