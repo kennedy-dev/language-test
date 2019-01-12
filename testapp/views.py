@@ -59,6 +59,9 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         if user_data and 'lessons' not in user_data.keys():
             user_data['lessons'] = {}
 
+        if not user_data:
+            user_data = {}
+
         for each_recording in user_data['lessons']:
             data = {
                 'id': each_recording,
