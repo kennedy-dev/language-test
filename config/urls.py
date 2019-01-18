@@ -4,12 +4,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView, RedirectView
 from django.views import defaults as default_views
-from testapp.views import RecordPage, RecordSuccessPage
+from testapp.views import RecordPage, RecordSuccessPage, AnalystPage
 from language.users.views import user_create_view
 
 urlpatterns = [
     path("", RedirectView.as_view(url="/accounts/login/"), name="home"),
     path("record/", RecordPage.as_view(), name="record"),
+    path("analyst/", AnalystPage.as_view(), name="analyst"),
     path("success/", RecordSuccessPage.as_view(), name="success"),
     path(
         "about/",
