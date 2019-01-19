@@ -17,7 +17,6 @@ class LanguageAdmin(admin.ModelAdmin):
 admin.site.register(Book)
 admin.site.register(Chapter)
 admin.site.register(Verse)
-
 admin.site.register(Lesson)
 
 

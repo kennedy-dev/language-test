@@ -4,13 +4,15 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 import json
 from django.shortcuts import render
-from testapp.models import Lesson
+from testapp.models import Lesson, Language
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse, HttpResponseRedirect
 import os
 from language.helpers.db_helper import MongoDBConnect
 from django.http import JsonResponse
 from django.conf import settings
+import time
+from bson.objectid import ObjectId
 
 
 class RecordSuccessPage(LoginRequiredMixin, TemplateView):
@@ -28,15 +30,75 @@ class AnalystPage(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         """Method to select analyst page."""
+
         context = {}
         mdb = MongoDBConnect(db_name='language', username="root", password="root")
 
-        condition = {
-            'userid': request.user.id,
-            'username': request.user.username
-        }
+        all_records = list(
+            mdb.find("recordings")
+        )
+        records = []
+        for each_record in all_records:
+            each_record['recordid'] = str(each_record['_id'])
+            records.append(each_record)
 
+        languages = Language.objects.all()
+
+        mdb.close_connection()
+
+        context['records'] = records
+        context['user'] = request.user
+        context['has_permission'] = True
+        from django.contrib import admin
+        context['site_header'] = admin.site.site_header
+        context['site_title'] = admin.site.site_title
+        context['index_title'] = admin.site.index_title
+
+        context['languages'] = languages
+        context['site_url'] = '/'
         return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        """Method to select analyst page."""
+
+        mdb = MongoDBConnect(db_name='language', username="root", password="root")
+
+        print(request.POST)
+        if 'select' in request.POST.get('id', ''):
+            record_id = request.POST.get('id', '').replace('select_','')
+            language_id = request.POST.get('value', '')
+
+            language = Language.objects.get(id=language_id).__dict__
+            del language['_state']
+
+            mdb.update_data(
+                collection_name="recordings",
+                update_condition={'_id': ObjectId(record_id)},
+                update_data={"approvedlanguage":language}
+            )
+
+            mdb.close_connection()
+            return JsonResponse({"status": "success"})
+
+        elif 'input_' in request.POST.get('id', ''):
+            record_id = request.POST.get('id', '').replace('input_','')
+            approved = request.POST.get('value', '')
+            if approved == 'true':
+                approved = True
+            else:
+                approved = False
+
+            mdb.update_data(
+                collection_name="recordings",
+                update_condition={'_id': ObjectId(record_id)},
+                update_data={"approved": approved}
+            )
+
+            mdb.close_connection()
+            return JsonResponse({"status": "success"})
+
+        mdb.close_connection()
+        return JsonResponse({"status": "fail"})
 
 
 class RecordPage(LoginRequiredMixin, TemplateView):
@@ -98,7 +160,6 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         lesson = Lesson.objects.get(id=lessonid)
 
         complete_name = os.path.join(settings.MEDIA_ROOT + '/userdata/' + str(request.user.id) + '/' + str(lessonid) + ".wav")
-        print(complete_name)
 
         path = settings.MEDIA_ROOT + '/userdata/'+ str(request.user.id)
         if not os.path.exists(path):
@@ -113,7 +174,7 @@ class RecordPage(LoginRequiredMixin, TemplateView):
             'userid':request.user.id
         }
         user_data = mdb.find_one(collection_name="users", condition=condition)
-        print(user_data)
+
         lessons={}
         lessons['lessonid'] = lessonid
         lessons['lessonname'] = str(lesson)
@@ -123,7 +184,9 @@ class RecordPage(LoginRequiredMixin, TemplateView):
             update_data={
                 'lessons': lessons,
                 'user_data': user_data,
-                'recordname': str(lessonid) + ".wav"
+                'recordname': str(lessonid) + ".wav",
+                'approved':False,
+                'recordtime': time.time()
             },
             update_condition={
                 'lessons': lessons,

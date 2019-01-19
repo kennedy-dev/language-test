@@ -1,37 +1,43 @@
-{% extends "base.html" %}
+{% extends "admin/base.html" %}
 
 {% block content %}
-<div class="col" style="margin-left: -30px" >
+<div class="col" style="" >
   <div class="card" style="margin: 15px; min-height: 400px">
     <div class="card-body">
+        <h1 style="text-align: center">Approve Records</h1> <br>
         <table id="example" class="display" style="width:100%">
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Age</th>
-                <th>Start date</th>
-                <th>Salary</th>
+                <th>Email</th>
+                <th>Lesson Name</th>
+                <th>Record</th>
+                <th>Language</th>
+                <th>Approved</th>
             </tr>
         </thead>
         <tbody>
+        {% for each_record in records %}
             <tr>
-                <td>Tiger Nixon</td>
-                <td>System Architect</td>
-                <td>Edinburgh</td>
-                <td>61</td>
-                <td>2011/04/25</td>
-                <td>$320,800</td>
+                <td>{{ each_record.user_data.name }}</td>
+                <td>{{ each_record.user_data.email }}</td>
+                <td>{{ each_record.lessons.lessonname }}</td>
+                <td>
+                    <audio controls="" src="/media/userdata/{{ each_record.user_data.userid }}/{{ each_record.recordname }}">
+                    </audio>
+                </td>
+                <td>
+                     <select id="select_{{ each_record.recordid }}" name="language" class="selectclass">
+                       {% for each_language in languages %}
+                          <option value="{{ each_language.id }}" {% if each_record.approvedlanguage.id == each_language.id %} selected {% endif %}>{{ each_language.title }}</option>
+                       {% endfor %}
+                    </select>
+                </td>
+                <td>
+                  <input class="inputclass" id="input_{{ each_record.recordid }}" type="checkbox" {% if each_record.approved == True %} checked {% endif %} name="approved">
+                </td>
             </tr>
-            <tr>
-                <td>Garrett Winters</td>
-                <td>Accountant</td>
-                <td>Tokyo</td>
-                <td>63</td>
-                <td>2011/07/25</td>
-                <td>$170,750</td>
-            </tr>
+        {% endfor %}
         </tbody>
         </table>
     </div>
