@@ -3,7 +3,7 @@ Base settings to build other settings files upon.
 """
 
 import environ
-
+import os
 ROOT_DIR = environ.Path(__file__) - 3  # (language/config/settings/base.py - 3 = language/)
 APPS_DIR = ROOT_DIR.path('language')
 
@@ -38,7 +38,15 @@ USE_TZ = True
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
-    'default': env.db('DATABASE_URL'),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('POSTGRES_DB', 'my_db'),
+        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+        'USER': os.environ.get('POSTGRES_USER', 'my_user'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'my_password'),
+        'CONN_MAX_AGE': 120
+    }
 }
 DATABASES['default']['ATOMIC_REQUESTS'] = True
 

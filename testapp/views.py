@@ -50,38 +50,38 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         mdb = MongoDBConnect(db_name='language', username="root", password="root")
 
         condition = {
-            'userid': request.user.id,
-            'username': request.user.username
+            'user_data.userid': request.user.id,
+            'user_data.username': request.user.username
         }
 
-        all_recordings = mdb.find(collection_name="recording",condition=condition)
-        all_recording_ids = [each_recording['lessonid'] for each_recording in all_recordings]
+        user_recording = []
+        all_recordings = mdb.find(collection_name="recordings",condition=condition)
+        all_recording_ids = []
+
+        for each_recording in all_recordings:
+            data = {
+                'id': str(each_recording['_id']),
+                'lessonname': each_recording['lessons']['lessonname'],
+                'path': '/userdata/' + str(request.user.id) + '/'
+            }
+            all_recording_ids.append(each_recording['lessons']['lessonid'])
+
+            data['name'] = each_recording['recordname']
+            user_recording.append(data)
+
         all_unattended_lessons = []
 
         if all_recordings:
             for each_lesson in alllessons:
-                if str(each_lesson['id']) not in all_recording_ids:
+                if str(each_lesson.id) not in all_recording_ids:
                     all_unattended_lessons.append(each_lesson)
         else:
             all_unattended_lessons = list(alllessons)
 
-        for each_recording in all_recordings:
-            data = {
-                'id': each_recording['id'],
-                'lessonname': each_recording['lessonname'],
-                'path': each_recording
-            }
-            try:
-                data['name'] = user_data['lessons'][each_recording]['name'] + '.wav'
-            except:
-                data['name'] = str(each_recording) + '.wav'
-
-            all_recordings.append(data)
-
         context={
             'lessons': all_unattended_lessons,
             'total_lessions': alllessons.count(),
-            'all_recordings': all_recordings
+            'all_recordings': user_recording
         }
 
         if len(all_unattended_lessons) == 0:
@@ -109,20 +109,28 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         file.close()
 
         mdb = MongoDBConnect(db_name='language', username="root", password="root")
-
-        user_data = mdb.find_one(collection_name="users", condition=update_condition)
-
+        condition = {
+            'userid':request.user.id
+        }
+        user_data = mdb.find_one(collection_name="users", condition=condition)
+        print(user_data)
         lessons={}
         lessons['lessonid'] = lessonid
         lessons['lessonname'] = str(lesson)
 
-        mdb.insert_data(
+        mdb.update_data(
             collection_name="recordings",
-            insert_data={
+            update_data={
                 'lessons': lessons,
-                'user_data': user_data.__dict__,
+                'user_data': user_data,
                 'recordname': str(lessonid) + ".wav"
-            }
+            },
+            update_condition={
+                'lessons': lessons,
+                'user_data': user_data,
+                'recordname': str(lessonid) + ".wav"
+            },
+            upsert=True
         )
 
         mdb.close_connection()
