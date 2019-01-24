@@ -126,7 +126,7 @@ class RecordPage(LoginRequiredMixin, TemplateView):
                 'lessonname': each_recording['lessons']['lessonname'],
                 'path': '/userdata/' + str(request.user.id) + '/'
             }
-            all_recording_ids.append(each_recording['lessons']['lessonid'])
+            all_recording_ids.append(str(each_recording['lessons']['lessonid']))
 
             data['name'] = each_recording['recordname']
             user_recording.append(data)

@@ -9,18 +9,18 @@
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Email</th>
+                <th>username</th>
                 <th>Lesson Name</th>
                 <th>Record</th>
                 <th>Language</th>
-                <th>Approved</th>
+                <th>Approve</th>
             </tr>
         </thead>
         <tbody>
         {% for each_record in records %}
             <tr>
                 <td>{{ each_record.user_data.name }}</td>
-                <td>{{ each_record.user_data.email }}</td>
+                <td>{{ each_record.user_data.username }}</td>
                 <td>{{ each_record.lessons.lessonname }}</td>
                 <td>
                     <audio controls="" src="/media/userdata/{{ each_record.user_data.userid }}/{{ each_record.recordname }}">
@@ -34,7 +34,10 @@
                     </select>
                 </td>
                 <td>
-                  <input class="inputclass" id="input_{{ each_record.recordid }}" type="checkbox" {% if each_record.approved == True %} checked {% endif %} name="approved">
+                   <select id="input_{{ each_record.recordid }}" name="approve" class="selectclass">
+                      <option value="true" {% if each_record.approved  %} selected {% endif %}>Approve</option>
+                      <option value="false" {% if not each_record.approved %} selected {% endif %}>Reject</option>
+                    </select>
                 </td>
             </tr>
         {% endfor %}
