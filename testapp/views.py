@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 import json
 from django.shortcuts import render
-from testapp.models import Lesson, Language
+from testapp.models import Lesson, Language, Book, Chapter
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse, HttpResponseRedirect
 import os
@@ -13,6 +13,9 @@ from django.http import JsonResponse
 from django.conf import settings
 import time
 from bson.objectid import ObjectId
+from django.contrib import admin
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class RecordSuccessPage(LoginRequiredMixin, TemplateView):
@@ -21,8 +24,56 @@ class RecordSuccessPage(LoginRequiredMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         """Method to select record page."""
         context = {}
-
         return render(request, self.template_name, context)
+
+
+class StatisticsPage(LoginRequiredMixin, TemplateView):
+    template_name = 'pages/stats.html'
+
+    def get(self, request, *args, **kwargs):
+        """Method to select statistics page."""
+
+        context = {}
+        user = request.GET.get('user', '')
+        book = request.GET.get('book', '')
+        chapter = request.GET.get('chapter', '')
+
+        condition = {}
+
+        mdb = MongoDBConnect(db_name='language', username="root", password="root")
+
+        context['users'] = User.objects.all()
+        context['books'] = Book.objects.all()
+        context['chapters'] = Chapter.objects.all()
+
+        if user:
+            condition['user_data.username'] = user
+            context['selecteduser'] = user
+
+        if book:
+            condition['book.id'] = int(book)
+            context['selectedbook'] = int(book)
+
+        if chapter:
+            condition['chapter.id'] = int(chapter)
+            context['selectedchapter'] = int(chapter)
+
+        all_records = list(
+            mdb.find("recordings", condition=condition)
+        )
+
+        records = []
+        for each_record in all_records:
+            each_record['recordid'] = str(each_record['_id'])
+            records.append(each_record)
+
+        context['records'] = all_records
+        mdb.close_connection()
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        """Method to select statistics page."""
+        return JsonResponse({"status": "fail"})
 
 
 class AnalystPage(LoginRequiredMixin, TemplateView):
@@ -30,6 +81,9 @@ class AnalystPage(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         """Method to select analyst page."""
+
+        if not request.user.is_superuser:
+            return HttpResponseRedirect('/')
 
         context = {}
         mdb = MongoDBConnect(db_name='language', username="root", password="root")
@@ -49,7 +103,6 @@ class AnalystPage(LoginRequiredMixin, TemplateView):
         context['records'] = records
         context['user'] = request.user
         context['has_permission'] = True
-        from django.contrib import admin
         context['site_header'] = admin.site.site_header
         context['site_title'] = admin.site.site_title
         context['index_title'] = admin.site.index_title
@@ -107,13 +160,17 @@ class RecordPage(LoginRequiredMixin, TemplateView):
 
     def get(self,request, *args, **kwargs):
         """Method to select record page.."""
+        if request.user.is_superuser:
+            return HttpResponseRedirect('/admin/')
+
         alllessons = Lesson.objects.all()
 
         mdb = MongoDBConnect(db_name='language', username="root", password="root")
 
         condition = {
             'user_data.userid': request.user.id,
-            'user_data.username': request.user.username
+            'user_data.username': request.user.username,
+            "recordname": {"$ne":""}
         }
 
         user_recording = []
@@ -121,18 +178,13 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         all_recording_ids = []
 
         for each_recording in all_recordings:
-            data = {
-                'id': str(each_recording['_id']),
-                'lessonname': each_recording['lessons']['lessonname'],
-                'path': '/userdata/' + str(request.user.id) + '/'
-            }
-            all_recording_ids.append(str(each_recording['lessons']['lessonid']))
+            each_recording['path'] = '/userdata/' + str(request.user.id) + '/'
+            each_recording['name'] = each_recording['recordname']
 
-            data['name'] = each_recording['recordname']
-            user_recording.append(data)
+            all_recording_ids.append(str(each_recording['lesson']['id']))
+            user_recording.append(each_recording)
 
         all_unattended_lessons = []
-
         if all_recordings:
             for each_lesson in alllessons:
                 if str(each_lesson.id) not in all_recording_ids:
@@ -175,23 +227,41 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         }
         user_data = mdb.find_one(collection_name="users", condition=condition)
 
-        lessons={}
-        lessons['lessonid'] = lessonid
-        lessons['lessonname'] = str(lesson)
+        book = lesson.book.__dict__
+        chapter = lesson.chapter.__dict__
+        verse = lesson.verse.__dict__
+        lesson = lesson.__dict__
+
+        del user_data['_id']
+        del lesson['_state']
+
+        if '_state' in lesson.keys():
+            del lesson['_state']
+
+        if '_state' in book.keys():
+            del book['_state']
+
+        if '_state' in chapter.keys():
+            del chapter['_state']
+
+        if '_state' in verse.keys():
+            del verse['_state']
 
         mdb.update_data(
             collection_name="recordings",
             update_data={
-                'lessons': lessons,
-                'user_data': user_data,
                 'recordname': str(lessonid) + ".wav",
                 'approved':False,
-                'recordtime': time.time()
+                'recordtime': time.time(),
+                'lesson': lesson,
+                'book': book,
+                'chapter': chapter,
+                'verse': verse,
+                'user_data': user_data,
             },
             update_condition={
-                'lessons': lessons,
-                'user_data': user_data,
-                'recordname': str(lessonid) + ".wav"
+                'lesson.id': lesson['id'],
+                'user_data.userid': user_data['userid']
             },
             upsert=True
         )

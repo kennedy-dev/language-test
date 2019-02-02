@@ -14,7 +14,7 @@
                 {% for each_recording in all_recordings %}
                   <li>
                     <span style="margin-bottom: 5px;">
-                      {{ each_recording.lessonname }}  <span class="glyphicon glyphicon-ok" style="color: green"></span>
+                      {{ each_recording.name }}  <span class="glyphicon glyphicon-ok" style="color: green"></span>
                     </span>
                     <audio controls="" src="/media/userdata/{{ request.user.id }}/{{ each_recording.name }}">
                     </audio>

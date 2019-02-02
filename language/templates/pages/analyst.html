@@ -4,6 +4,7 @@
 <div class="col" style="" >
   <div class="card" style="margin: 15px; min-height: 400px">
     <div class="card-body">
+
         <h1 style="text-align: center">Approve Records</h1> <br>
         <table id="example" class="display" style="width:100%">
         <thead>
@@ -18,10 +19,11 @@
         </thead>
         <tbody>
         {% for each_record in records %}
+            {% if each_record.recordname  %}
             <tr>
                 <td>{{ each_record.user_data.name }}</td>
                 <td>{{ each_record.user_data.username }}</td>
-                <td>{{ each_record.lessons.lessonname }}</td>
+                <td>{{ each_record.book.title }} {{ each_record.chapter.title }}</td>
                 <td>
                     <audio controls="" src="/media/userdata/{{ each_record.user_data.userid }}/{{ each_record.recordname }}">
                     </audio>
@@ -40,6 +42,7 @@
                     </select>
                 </td>
             </tr>
+          {% endif %}
         {% endfor %}
         </tbody>
         </table>

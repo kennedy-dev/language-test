@@ -13,14 +13,21 @@
 <div id="content-main">
 
 {% if app_list %}
-        <div class="app-analyst module" style="background: #447e9b">
-        <table>
-          <caption>
-              <a href="/analyst/" class="section"> Analyst</a>
-          </caption>
-          <tr class="model-www"></tr>
-        </table>
-            </div>
+        <div class="app-book module" >
+            <table style="width: 100%">
+              <caption>
+                <a href="#" class="section" title="">Analyst</a>
+              </caption>
+              <tbody>
+                <tr class="model-language" style="    background: white;">
+                    <th scope="row"><a href="/analyst/">Approve</a></th>
+                </tr>
+                <tr class="model-language" style="    background: white;">
+                    <th scope="row"><a href="/statistics/">Statistics</a></th>
+                </tr>
+              </tbody>
+            </table>
+        </div>
     {% for app in app_list %}
         <div class="app-{{ app.app_label }} module">
         <table>

@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from language.users.forms import SignUpForm
 from django.views.generic import View, TemplateView
 from language.helpers.db_helper import MongoDBConnect
+from testapp.models import Lesson
 
 
 User = get_user_model()
@@ -77,6 +78,7 @@ class UserCreationView(TemplateView):
             email = form.cleaned_data.get('email')
 
             user.save()
+            lessons = Lesson.objects.all()
 
             insert_data = {
                 'name':name,
@@ -87,6 +89,38 @@ class UserCreationView(TemplateView):
 
             mdb = MongoDBConnect(db_name='language', username="root", password="root")
             mdb.insert_data(collection_name="users", insert_data=insert_data)
+
+            for each_lesson in lessons:
+                book = each_lesson.book.__dict__
+                chapter = each_lesson.chapter.__dict__
+                verse = each_lesson.verse.__dict__
+                lesson = each_lesson.__dict__
+
+                if '_state' in lesson.keys():
+                    del lesson['_state']
+
+                if '_state' in book.keys():
+                    del book['_state']
+
+                if '_state' in chapter.keys():
+                    del chapter['_state']
+
+                if '_state' in verse.keys():
+                    del verse['_state']
+
+                update_data = {
+                    'lesson': lesson,
+                    'book': book,
+                    'chapter': chapter,
+                    'verse': verse,
+                    'user_data': insert_data,
+                    'recordname': "",
+                    'approved': False,
+                    'recordtime': ""
+                }
+
+                mdb.insert_data(collection_name="recordings", insert_data=update_data)
+
             mdb.close_connection()
 
             raw_password = form.cleaned_data.get('password1')
