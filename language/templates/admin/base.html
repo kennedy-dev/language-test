@@ -46,7 +46,7 @@
 
     {% if not is_popup %}
     <!-- Header -->
-    <div id="header" style="{% if 'statistics' in request.path %}height: 60px; {% endif %}">
+    <div id="header" style="{% if 'statistics' in request.path or 'analyst' in request.path %}height: 60px; {% endif %}">
         <div id="branding">
         {% block branding %}
         <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Language Settings Admin') }}</a></h1>
