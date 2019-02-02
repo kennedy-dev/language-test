@@ -46,7 +46,7 @@
 
     {% if not is_popup %}
     <!-- Header -->
-    <div id="header">
+    <div id="header" style="height: 60px;">
         <div id="branding">
         {% block branding %}
         <h1 id="site-name"><a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a></h1>
