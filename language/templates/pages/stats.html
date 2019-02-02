@@ -7,21 +7,21 @@
 
         <h1 style="text-align: center">Statistics</h1> <br>
         <p style="margin-bottom: 40px; text-align: left">
-            <select id="select_user" name="user" style="width: 250px; margin-right: 15px">
+            <select id="select_user" name="user" style="width: 150px; margin-right: 15px">
                 <option value="" >Select a user </option>
                {% for each_user in users %}
                   <option {% if selecteduser == each_user.username %}selected{% endif %} value="{{ each_user.username }}" >{{ each_user.username }}</option>
                {% endfor %}
             </select>
 
-            <select id="select_book" name="book" style="width: 250px; margin-right: 15px">
+            <select id="select_book" name="book" style="width: 150px; margin-right: 15px">
                 <option value="" >Select a Book </option>
                {% for each_book in books %}
                   <option  {% if selectedbook == each_book.id %}selected{% endif %}  value="{{ each_book.id }}" >{{ each_book.title }}</option>
                {% endfor %}
             </select>
 
-            <select id="select_chapter" name="chapter" style="width: 250px; margin-right: 15px">
+            <select id="select_chapter" name="chapter" style="width: 150px; margin-right: 15px">
                 <option value="" >Select a chapter </option>
                {% for each_chapter in chapters %}
                   <option  {% if selectedchapter == each_chapter.id %}selected{% endif %}  value="{{ each_chapter.id }}" >{{ each_chapter.title }}</option>
