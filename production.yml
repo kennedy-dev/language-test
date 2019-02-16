@@ -13,7 +13,7 @@ services:
       dockerfile: ./compose/production/django/Dockerfile
     image: language_production_django
     volumes:
-      - staticfiles:/app/staticfiles:rw
+      - staticfiles:/app/staticfiles
     depends_on:
       - postgres
       - redis
@@ -49,7 +49,7 @@ services:
       - django
     volumes:
       - production_caddy:/root/.caddy
-      - staticfiles:/app/staticfiles:rw
+      - staticfiles:/app/staticfiles
     env_file:
       - ./.envs/.production/.caddy
     ports:
