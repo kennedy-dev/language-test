@@ -3,13 +3,14 @@ www.{$DOMAIN_NAME} {
 }
 
 {$DOMAIN_NAME} {
-    root /var/www/language
     proxy / django:5000 {
         header_upstream Host {host}
         header_upstream X-Real-IP {remote}
         header_upstream X-Forwarded-Proto {scheme}
         header_upstream X-CSRFToken {~csrftoken}
+        transparent
         except /static
+        except /media
     }
     log stdout
     errors stdout
