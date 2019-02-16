@@ -7,6 +7,8 @@ from django.views import defaults as default_views
 from testapp.views import RecordPage, RecordSuccessPage, AnalystPage, StatisticsPage
 from language.users.views import user_create_view
 
+from django.conf.urls import url
+
 
 urlpatterns = [
     path("", RedirectView.as_view(url="/accounts/login/"), name="home"),
