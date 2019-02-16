@@ -146,7 +146,7 @@ INSTALLED_APPS += ['gunicorn']  # noqa F405
 # https://github.com/antonagestam/collectfast#installation
 INSTALLED_APPS = ['collectfast'] + INSTALLED_APPS  # noqa F405
 AWS_PRELOAD_METADATA = True
-
+INSTALLED_APPS += ['django_extensions']
 
 # LOGGING
 # ------------------------------------------------------------------------------
