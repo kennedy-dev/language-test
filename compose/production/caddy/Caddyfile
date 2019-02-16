@@ -5,15 +5,16 @@ www.{$DOMAIN_NAME} {
 {$DOMAIN_NAME} {
     root /app
     proxy / django:5000 {
-        transparent
-        except /static
-        except /media
-
         header_upstream Host {host}
         header_upstream X-Real-IP {remote}
         header_upstream X-Forwarded-Proto {scheme}
         header_upstream X-CSRFToken {~csrftoken}
+
+        transparent
+        except /static /media
+
     }
+
     log stdout
     errors stdout
     gzip
