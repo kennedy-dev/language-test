@@ -11,6 +11,9 @@ services:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
     image: language_production_django
+    volumes:
+      - ./language/static:/var/lib/static
+      - ./language/media:/var/lib/media
     depends_on:
       - postgres
       - redis
@@ -46,6 +49,8 @@ services:
       - django
     volumes:
       - production_caddy:/root/.caddy
+      - ./language/static:/var/lib/static
+      - ./language/media:/var/lib/media
     env_file:
       - ./.envs/.production/.caddy
     ports:
