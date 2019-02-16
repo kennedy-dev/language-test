@@ -4,7 +4,7 @@ volumes:
   production_postgres_data: {}
   production_postgres_data_backups: {}
   production_caddy: {}
-  staticfiles: {}
+  static: {}
 
 services:
   django: &django
@@ -13,7 +13,7 @@ services:
       dockerfile: ./compose/production/django/Dockerfile
     image: language_production_django
     volumes:
-      - staticfiles:/app/staticfiles
+      - static:/app/static
     depends_on:
       - postgres
       - redis
@@ -49,7 +49,7 @@ services:
       - django
     volumes:
       - production_caddy:/root/.caddy
-      - staticfiles:/app/staticfiles
+      - static:/app/static
     env_file:
       - ./.envs/.production/.caddy
     ports:
