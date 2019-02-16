@@ -201,6 +201,6 @@ LOGGING = {
 # ------------------------------------------------------------------------------
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-print(os.path.realpath(__file__))
-STATIC_ROOT = '/app/language/static/'
+STATIC_ROOT = '/app/static/'
+MEDIA_ROOT = '/app/media/'
 DEBUG=True
