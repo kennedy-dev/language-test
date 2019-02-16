@@ -199,6 +199,4 @@ LOGGING = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-
-print(STATIC_ROOT)
-print (MEDIA_ROOT)
+DEBUG = True
