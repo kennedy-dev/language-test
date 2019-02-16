@@ -199,8 +199,8 @@ LOGGING = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR,'<app_name>/static'),os.path.join(BASE_DIR, 'static'),)
-
+MEDIA_URL = '/media/'
+STATIC_ROOT = '/app/language/static/'
+MEDIA_ROOT = '/app/language/media/'
 DEBUG=True
