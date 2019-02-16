@@ -25,5 +25,5 @@ from allauth.account.models import EmailAddress
 from django.contrib.sites.models import Site
 
 admin.site.unregister(Group)
-admin.site.unregister(Site)
+# admin.site.unregister(Site)
 admin.site.unregister(EmailAddress)
