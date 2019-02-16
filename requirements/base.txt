@@ -20,3 +20,4 @@ djangorestframework==3.9.0  # https://github.com/encode/django-rest-framework
 coreapi==2.3.3  # https://github.com/core-api/python-client
 
 pymongo
+whitenoise==3.3.1
