@@ -199,22 +199,4 @@ LOGGING = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-# web accessible folder
-STATIC_ROOT = '/home/ubuntu/www/language/static/'
 
-# URL prefix for static files.
-STATIC_URL = '/static/'
-
-# Additional locations of static files
-STATICFILES_DIRS = (
-    # location of your application, should not be public web accessible
-    '/app/language/static',
-)
-
-# List of finder classes that know how to find static files in
-# various locations.
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
-DEBUG=True
