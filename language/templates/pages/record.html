@@ -14,7 +14,7 @@
                 {% for each_recording in all_recordings %}
                   <li style="margin-left: -36px">
                     <span style="margin-bottom: 5px;">
-                      {{ each_recording.name }} <span><i class="fas fa-trash-alt"></i></span>
+                      {{ each_recording.name }} <span><a href="/record?action=delete&id={{ each_recording._id }}><i class="fas fa-trash-alt" style="float: right; color: red;"></i><</a> </span>
                     </span>
 
                     <audio controls="" src="/media/userdata/{{ request.user.id }}/{{ each_recording.name }}">

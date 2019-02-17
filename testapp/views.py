@@ -180,7 +180,7 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         for each_recording in all_recordings:
             each_recording['path'] = '/userdata/' + str(request.user.id) + '/'
             each_recording['name'] = each_recording['recordname']
-
+            each_recording['record_id'] = str(each_recording['_id'])
             all_recording_ids.append(str(each_recording['lesson']['id']))
             user_recording.append(each_recording)
 
