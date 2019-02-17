@@ -15,6 +15,7 @@ import time
 from bson.objectid import ObjectId
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from bson.objectid import ObjectId
 User = get_user_model()
 
 
@@ -162,10 +163,14 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         """Method to select record page.."""
         if request.user.is_superuser:
             return HttpResponseRedirect('/admin/')
+        action = request.GET.get('action', None)
+        mdb = MongoDBConnect(db_name='language', username="root", password="root")
+
+        if str(action) == "delete":
+            delete_record_id = request.GET.get('id', None)
+            mdb.delete_data(collection_name="recordings", condition={'_id': ObjectId(delete_record_id)})
 
         alllessons = Lesson.objects.all()
-
-        mdb = MongoDBConnect(db_name='language', username="root", password="root")
 
         condition = {
             'user_data.userid': request.user.id,

@@ -84,6 +84,12 @@ class MongoDBConnect(object):
             upsert=upsert
         )
 
+    def delete_data(self, collection_name="item", condition={}):
+        """Create a new schema request."""
+        return self.db[collection_name].delete_one(
+            condition
+        )
+
     def update_many_data(self, collection_name="item", update_condition={}, update_data={}, upsert=False):
         """Create a new schema request."""
         updated = self.db[collection_name].update_many(
