@@ -9,13 +9,14 @@
         <div class="card-body">
               <h5 class="card-title" style="text-align: center; margin-top: 10px;">My Recordings</h5>
             {% if all_recordings %}
-            <ol id="myrecordings" style="margin-left: -60px; margin-top: 20px;">
+            <ol id="myrecordings" style=" margin-top: 20px;">
 
                 {% for each_recording in all_recordings %}
-                  <li>
+                  <li style="margin-left: -36px">
                     <span style="margin-bottom: 5px;">
-                      {{ each_recording.name }}  <span class="glyphicon glyphicon-ok" style="color: green"></span>
+                      {{ each_recording.name }} <span><i class="fas fa-trash-alt"></i></span>
                     </span>
+
                     <audio controls="" src="/media/userdata/{{ request.user.id }}/{{ each_recording.name }}">
                     </audio>
                   </li>

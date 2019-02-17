@@ -104,7 +104,7 @@ Instructions
 
 * To create an **admin account**, use this command::
 
-     $ sudo docker-compose -f production.yml run django python manage.py createsuperuser
+     $ sudo docker-compose -f production.yml run django python manage.py runscript loaddata
 
 5. Run the app
 ^^^^^^^^^^^^^^^^

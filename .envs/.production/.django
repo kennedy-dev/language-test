@@ -15,7 +15,7 @@ DJANGO_SECURE_SSL_REDIRECT=False
 # ------------------------------------------------------------------------------
 MAILGUN_API_KEY=6fac67ef6bc468638ccdc61dbdea518d-1b65790d-9d88139e
 DJANGO_SERVER_EMAIL=languagetests
-MAILGUN_DOMAIN=sandbox35eb4874f7ec4818811f3b61df863c9e.mailgun.org
+MAILGUN_DOMAIN=https://api.mailgun.net/v3/sandbox35eb4874f7ec4818811f3b61df863c9e.mailgun.org
 
 # AWS
 # ------------------------------------------------------------------------------

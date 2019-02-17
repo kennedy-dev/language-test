@@ -83,7 +83,7 @@ class UserCreationView(TemplateView):
 
             insert_data = {
                 'name':name,
-                'userid':user.id,
+                'userid': user.id,
                 'username':username,
                 'email': email,
                 'gender': gender
