@@ -1,7 +1,7 @@
-language
-========
+survey
+======
 
-Behold My Awesome Project!
+app to create language test
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/
@@ -11,92 +11,130 @@ Behold My Awesome Project!
 :License: MIT
 
 
-Settings
---------
+Requirements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Moved to settings_.
+1. Create an AWS Ubuntu Machine using free tier account (Ubuntu 16.04 LTS) using key pair value
 
-.. _settings: http://cookiecutter-django.readthedocs.io/en/latest/settings.html
 
-Basic Commands
---------------
+2. Create a New Security Group with inboud rules, that allows ssh from any ip and tcp request on port any port
 
-Setting Up Your Users
+3. Right click the ec2 instance and from networking, change security group and assign this security group
+
+4. Connect to the machine using following command
+
+    $ ssh -i <yourpemfile.pem> ubuntu@<ip_address>
+
+5. Setup Up Docker on your machine using following commands
+
+    $ sudo apt-get update
+
+    $ sudo apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+
+    $ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+    $ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+    $ sudo apt-get update
+
+    $ sudo apt-get install docker-ce
+
+    $ sudo apt-get install docker-compose
+
+6. Go to your freenom.com  or any domain name service provider, create a domain and edit the freenom dns record so as to point to your server ipaddress
+
+7. Go to AWS account and create a publicly accessible s3 bucket and under acounts section create api keys
+
+8. Go the repository and edit following files:
+    a. envs > .production > .caddy ---> change the languagetest.tk domain to your domain name
+    b. envs > .production > .django ---> change the DJANGO_ALLOWED_HOSTS languagetest.tk domain to your domain name
+    c. envs > .production > .django ---> edit the followings:
+
+
+After the requirements are completed
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Once you have completed docker installation, including docker and docker-compose, follow following instructions
+
+
+Instructions
+------------------------------------------
+
+1. Clone the repository
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    $ git clone https://github.com/bhanduroshan/language-test.git
+
+2. Move to the survey directory
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    $ cd survey
+
+3. Build the app
+^^^^^^^^^^^^^^^^^^^
+
+* To run the application, we need to build it first using following command
+
+    $ sudo docker-compose -f production.yml  build
+
+
+2. Make Migrations
+^^^^^^^^^^^^^^^^^^^
+
+* To run the application, we need to build it first using following command
+
+    $ sudo docker-compose -f production.yml run django python manage.py makemigrations
+
+
+3. Migrate the app
+^^^^^^^^^^^^^^^^^^^
+
+* To run the application, we need to build it first using following command
+
+    $ sudo docker-compose -f production.yml run django python manage.py migrate
+
+
+4. Set up Admin User
+^^^^^^^^^^^^^^^^^^^^^^
+
+* To create an **admin account**, use this command::
+
+     $ sudo docker-compose -f production.yml run django python manage.py createsuperuser
+
+5. Set up initial data
+^^^^^^^^^^^^^^^^^^^^^^
+
+* To create an **admin account**, use this command::
+
+     $ sudo docker-compose -f production.yml run django python manage.py createsuperuser
+
+5. Run the app
+^^^^^^^^^^^^^^^^
+
+* To run the application, we need to build it first using following command
+
+    $ sudo nohup docker-compose -f production.yml  up --build
+
+
+6. Mail Setup for Password Reset
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    a. Go mailgun.com
+    b. create a free account
+    c. get api credentials
+    d. sudo nano .env/.production/.django
+    e. Go to admin panel, edit the sites to match your site
+    e. Enter the api credentials you get from mailgun
+
+        MAILGUN_API_KEY=
+
+        DJANGO_SERVER_EMAIL=
+
+        MAILGUN_DOMAIN=
+
+7. Access the app
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* Go to your browser and type: http://<ip_address>
+
+
+8. Sample demo of the app
 ^^^^^^^^^^^^^^^^^^^^^
 
-* To create a **normal user account**, just go to Sign Up and fill out the form. Once you submit it, you'll see a "Verify Your E-mail Address" page. Go to your console to see a simulated email verification message. Copy the link into your browser. Now the user's email should be verified and ready to go.
-
-* To create an **superuser account**, use this command::
-
-    $ python manage.py createsuperuser
-
-For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
-
-Type checks
-^^^^^^^^^^^
-
-Running type checks with mypy:
-
-::
-
-  $ mypy language
-
-Test coverage
-^^^^^^^^^^^^^
-
-To run the tests, check your test coverage, and generate an HTML coverage report::
-
-    $ coverage run -m pytest
-    $ coverage html
-    $ open htmlcov/index.html
-
-Running tests with py.test
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-::
-
-  $ pytest
-
-Live reloading and Sass CSS compilation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Moved to `Live reloading and SASS compilation`_.
-
-.. _`Live reloading and SASS compilation`: http://cookiecutter-django.readthedocs.io/en/latest/live-reloading-and-sass-compilation.html
-
-
-
-Celery
-^^^^^^
-
-This app comes with Celery.
-
-To run a celery worker:
-
-.. code-block:: bash
-
-    cd language
-    celery -A language.taskapp worker -l info
-
-Please note: For Celery's import magic to work, it is important *where* the celery commands are run. If you are in the same folder with *manage.py*, you should be right.
-
-
-
-
-
-Deployment
-----------
-
-The following details how to deploy this application.
-
-
-
-Docker
-^^^^^^
-
-See detailed `cookiecutter-django Docker documentation`_.
-
-.. _`cookiecutter-django Docker documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html
-
-
-
+* Go to https://languagetest.tk/

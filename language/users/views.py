@@ -74,6 +74,7 @@ class UserCreationView(TemplateView):
             user = form.save()
             user.refresh_from_db()  # load the profile instance created by the signal
             name = form.cleaned_data.get('name')
+            gender = form.cleaned_data.get('gender')
             username = form.cleaned_data.get('username')
             email = form.cleaned_data.get('email')
 
@@ -84,7 +85,8 @@ class UserCreationView(TemplateView):
                 'name':name,
                 'userid':user.id,
                 'username':username,
-                'email': email
+                'email': email,
+                'gender': gender
             }
 
             mdb = MongoDBConnect(db_name='language', username="root", password="root")

@@ -34,6 +34,16 @@
                 </div>
             {% endif %}
 
+             Gender:
+             <input required type="radio" name="gender" value="male" {% if form.gender.value == 'male' %} selected {% endif %}> Male
+             <input required type="radio" name="gender" value="female" {% if form.gender.value == 'female' %} selected {% endif %}> Female<br>
+
+             {% if form.errors.gender %}
+                <div class="alert alert-danger">
+                    {{ form.errors.gender|escape }}
+                </div>
+             {% endif %}
+
             Email:
             <input type="email" name="email" placeholder="Enter your email"
                    value="{% if form.email.value %} {{ form.email.value }} {%  endif %}"
