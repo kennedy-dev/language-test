@@ -4,7 +4,7 @@
 DJANGO_SETTINGS_MODULE=config.settings.production
 DJANGO_SECRET_KEY=5aeIfYmmGVFZr6BrdStOsJOA83ugVYmdY9kOMc1DC4Nk9NUjNUq8ubOMBoTes1gv
 DJANGO_ADMIN_URL=RT93hq7ay35NDwQbwFb7oHMS541IfwK7/
-DJANGO_ALLOWED_HOSTS=.languagetest.tk
+DJANGO_ALLOWED_HOSTS=.languagetests.tk
 
 # Security
 # ------------------------------------------------------------------------------
@@ -14,7 +14,7 @@ DJANGO_SECURE_SSL_REDIRECT=False
 # Email
 # ------------------------------------------------------------------------------
 MAILGUN_API_KEY=6fac67ef6bc468638ccdc61dbdea518d-1b65790d-9d88139e
-DJANGO_SERVER_EMAIL=sandbox35eb4874f7ec4818811f3b61df863c9e.mailgun.org
+DJANGO_SERVER_EMAIL=languagetests
 MAILGUN_DOMAIN=sandbox35eb4874f7ec4818811f3b61df863c9e.mailgun.org
 
 # AWS
