@@ -66,7 +66,7 @@ Instructions
 
 2. Move to the survey directory
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    $ cd survey
+    $ cd language-test
 
 3. Build the app
 ^^^^^^^^^^^^^^^^^^^
