@@ -172,6 +172,10 @@ class PasswordChangeView(TemplateView):
         else:
             messages.error(request, 'Please correct the error below.')
 
+        return render(request, 'account/password_change.html', {
+            'form': form
+        })
+
     def get(self,request, *args, **kwargs):
         """
 
@@ -182,9 +186,9 @@ class PasswordChangeView(TemplateView):
         """
 
         form = PasswordChangeForm(request.user)
-        return render(request, 'accounts/change_password.html', {
-        'form': form
-    })
+        return render(request, 'account/password_change.html', {
+            'form': form
+        })
 
 
 password_change_view = PasswordChangeView.as_view()
