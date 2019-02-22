@@ -8,6 +8,10 @@ from language.users.forms import SignUpForm
 from django.views.generic import View, TemplateView
 from language.helpers.db_helper import MongoDBConnect
 from testapp.models import Lesson
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.shortcuts import render, redirect
 
 
 User = get_user_model()
@@ -146,3 +150,41 @@ class UserCreationView(TemplateView):
 
 
 user_create_view = UserCreationView.as_view()
+
+
+class PasswordChangeView(TemplateView):
+
+    def post(self,request, *args, **kwargs):
+        """
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+
+    def get(self,request, *args, **kwargs):
+        """
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+
+        form = PasswordChangeForm(request.user)
+        return render(request, 'accounts/change_password.html', {
+        'form': form
+    })
+
+
+password_change_view = PasswordChangeView.as_view()
