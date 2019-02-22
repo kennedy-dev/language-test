@@ -29,7 +29,7 @@ urlpatterns = [
         include("language.users.urls", namespace="users"),
     ),
     path("accounts/signup/", view=user_create_view, name="signup"),
-    path("accounts/password/reset/key/2-set-password/", view=password_change_view, name="change_password"),
+    path("accounts/password/reset/$", view=password_change_view, name="change_password"),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(
