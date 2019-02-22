@@ -6,7 +6,7 @@ from django.views.generic import TemplateView, RedirectView
 from django.views import defaults as default_views
 from testapp.views import RecordPage, RecordSuccessPage, AnalystPage, StatisticsPage
 from language.users.views import user_create_view, password_change_view
-
+from django.contrib.auth.views import password_reset, password_reset_confirm
 from django.conf.urls import url
 
 
@@ -29,7 +29,8 @@ urlpatterns = [
         include("language.users.urls", namespace="users"),
     ),
     path("accounts/signup/", view=user_create_view, name="signup"),
-    path("accounts/password/reset/$", view=password_change_view, name="change_password"),
+    path("accounts/password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$",
+                         password_reset_confirm, name='pass-reset-confirm'),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
 ] + static(
