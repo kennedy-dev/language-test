@@ -7,7 +7,41 @@
       <div class="card"
        style="margin-right: 6px; margin-left: -25px; margin-top: 15px; min-height: 300px">
         <div class="card-body">
-              <h5 class="card-title" style="text-align: center; margin-top: 10px;">My Recordings</h5>
+          <h5 class="card-title" style="text-align: center; margin-top: 10px;">Select to Record</h5>
+          <div id="selectDiv" style="margin-bottom: 20px;">
+
+            <label style="width: 80px;">Book:</label>
+            <select id="selectbook" style="margin-bottom: 10px; width: 100px;">
+              {% for each_book in books %}
+                <option value="{{ each_book.id }}">{{ each_book.title }}</option>
+              {% endfor %}
+            </select> <br/>
+
+            <label style="width: 80px;">Chapter:</label>
+            <select id="selectchapter"  style="margin-bottom: 10px; width: 100px;">
+              {% for each_chapter in chapters %}
+                <option value="{{ each_chapter.id }}">{{ each_chapter.title }}</option>
+              {% endfor %}
+            </select> <br/>
+
+            <label style="width: 80px;">Verse:</label>
+            <select  id="selectverse" style="margin-bottom: 10px; width: 100px;">
+              {% for each_verse in verses %}
+                <option value="{{ each_verse.id }}">{{ each_verse.title }}</option>
+              {% endfor %}
+            </select> <br/>
+
+            <label style="width: 80px;">Language:</label>
+            <select  id="selectlanguage" style="margin-bottom: 10px; width: 100px;">
+              {% for each_language in languages %}
+                <option value="{{ each_language.id }}">{{ each_language.title }}</option>
+              {% endfor %}
+            </select> <br/>
+
+            <input style="height: 28px; margin: 20px;" type="button" class="btn btn-default btn-sm" id="btnSelectLesson" value="Select"></input>
+        </div>
+
+          <h5 class="card-title" style="text-align: center; margin-top: 10px;">My Recordings</h5>
             {% if all_recordings %}
             <ol id="myrecordings" style=" margin-top: 20px;">
 
@@ -38,9 +72,13 @@
   <div class="col" style="margin-left: -30px" >
     <div class="card" style="margin: 15px; min-height: 400px">
       <div class="card-body">
-        {%  if success %}
 
-            Congratulations!! You have successfully completed all the test.
+        {%  if success %}
+            {%  if not message %}
+                Congratulations!! You have successfully completed all the test.
+              {% else %}
+                {{ message }}
+              {% endif %}
           {% else %}
             <h5 class="card-title" style="text-align: center">{{ lessons.0 }}</h5>
             {{ lessons.0.text_to_read }}

@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 import json
 from django.shortcuts import render
-from testapp.models import Lesson, Language, Book, Chapter
+from testapp.models import Lesson, Language, Book, Chapter, Verse
 from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse, HttpResponseRedirect
 import os
@@ -15,8 +15,10 @@ import time
 from bson.objectid import ObjectId
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.views import View
 from bson.objectid import ObjectId
 User = get_user_model()
+from django.forms.models import model_to_dict
 
 
 class RecordSuccessPage(LoginRequiredMixin, TemplateView):
@@ -166,11 +168,41 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         action = request.GET.get('action', None)
         mdb = MongoDBConnect(db_name='language', username="root", password="root")
 
+        selected_language = request.GET.get('language', None)
+        if selected_language:
+            selected_language = int(selected_language)
+
+        selected_verse = request.GET.get('verse', None)
+        if selected_verse:
+            selected_verse = int(selected_verse)
+
+        selected_chapter = request.GET.get('chapter', None)
+        if selected_chapter:
+            selected_chapter = int(selected_chapter)
+
+        selected_book = request.GET.get('book', None)
+        if selected_book:
+            selected_book = int(selected_book)
+
+        context = {}
+
         if str(action) == "delete":
             delete_record_id = request.GET.get('id', None)
             mdb.delete_data(collection_name="recordings", condition={'_id': ObjectId(delete_record_id)})
 
-        alllessons = Lesson.objects.all()
+        if selected_language and selected_verse and selected_chapter and selected_book:
+            alllessons = Lesson.objects.filter(
+                book__id=selected_book,
+                chapter__id=selected_chapter,
+                verse__id=selected_verse,
+                language_id=selected_language
+            )
+            if alllessons:
+                all_recordings = [alllessons[0]]
+            else:
+                context['message'] = 'No lesson found for recording.'
+        else:
+            alllessons = Lesson.objects.all()
 
         condition = {
             'user_data.userid': request.user.id,
@@ -197,11 +229,17 @@ class RecordPage(LoginRequiredMixin, TemplateView):
         else:
             all_unattended_lessons = list(alllessons)
 
-        context={
-            'lessons': all_unattended_lessons,
-            'total_lessions': alllessons.count(),
-            'all_recordings': user_recording
-        }
+        if len(all_unattended_lessons) == 0:
+            context['message'] = 'Congratulations! You have completed recording for this verse.'
+
+        context['lessons'] = all_unattended_lessons
+        context['total_lessons'] = alllessons.count()
+        context['all_recordings'] = user_recording
+        context['books'] = Book.objects.all()
+        context['languages'] = Language.objects.all()
+        context['chapters'] = Chapter.objects.all()
+        context['verses'] = Verse.objects.all()
+        context['alllessons'] = Lesson.objects.all()
 
         if len(all_unattended_lessons) == 0:
             context['success'] = True
@@ -273,3 +311,50 @@ class RecordPage(LoginRequiredMixin, TemplateView):
 
         mdb.close_connection()
         return JsonResponse({'status':'success', 'next': 1 })
+
+
+
+class DataView(View):
+
+    def post(self,request, *args, **kwargs):
+        """
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        book_id = request.POST.get('book_id', None)
+        chapter_id = request.POST.get('chapter_id', None)
+        return_data = {
+            'chapters': [],
+            'verses': []
+        }
+
+        print("Book Id:: ",book_id, "Chapter ID::", chapter_id)
+        if book_id:
+            chapters = list(Chapter.objects.filter(book__id=book_id))
+            verses = list(Verse.objects.filter(chapter__book__id=book_id))
+
+            json_chapters = []
+            for each_chapter in chapters:
+                json_chapters.append(model_to_dict(each_chapter))
+
+            json_verses = []
+            for each_verse in verses:
+                json_verses.append(model_to_dict(each_verse))
+
+            return_data['chapters'] = json_chapters
+            return_data['verses'] = json_verses
+
+        if chapter_id:
+            verses = list(Verse.objects.filter(chapter__id=chapter_id))
+
+            json_verses = []
+            for each_verse in verses:
+                json_verses.append(model_to_dict(each_verse))
+
+            return_data['verses'] = json_verses
+
+        print(return_data)
+        return JsonResponse(return_data)

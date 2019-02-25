@@ -8,6 +8,7 @@ from testapp.views import RecordPage, RecordSuccessPage, AnalystPage, Statistics
 from language.users.views import user_create_view, password_change_view
 from django.contrib.auth.views import password_reset, password_reset_confirm
 from django.conf.urls import url
+from testapp.views import DataView
 
 
 urlpatterns = [
@@ -16,6 +17,7 @@ urlpatterns = [
     path("analyst/", AnalystPage.as_view(), name="analyst"),
     path("statistics/", StatisticsPage.as_view(), name="stats"),
     path("success/", RecordSuccessPage.as_view(), name="success"),
+    path("getdata/", DataView.as_view(), name="getdata"),
     path(
         "about/",
         TemplateView.as_view(template_name="pages/about.html"),
