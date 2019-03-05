@@ -2,6 +2,9 @@
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from collections import Counter
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 class Language(models.Model):
@@ -81,6 +84,8 @@ class Lesson(models.Model):
     version = models.TextField(null=True, blank=True)
     text_to_read = models.TextField(null=True, blank=True)
 
+    unique_words = models.TextField(null=True, blank=True)
+
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now_add=False, blank=True, null=True)
 
@@ -92,3 +97,18 @@ class Lesson(models.Model):
 
     def __str__(self):
         return str(self.book.title) + ": " + str(self.chapter.title) + " - " + str(self.verse.title)
+
+    def save(self, *args, **kwargs):
+        self.unique_words = ''
+        word_count = self.text_to_read.lower().split()
+
+        for each_word in word_count:
+            formatted_word = str(each_word)\
+                .replace(',', '')\
+                .replace('.', '')\
+                .replace('?', '')
+
+            if formatted_word not in self.unique_words:
+                self.unique_words += formatted_word + ' '
+
+        super(Lesson, self).save(*args, **kwargs)
