@@ -30,6 +30,17 @@ class RecordSuccessPage(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name, context)
 
 
+class WordsView(LoginRequiredMixin, TemplateView):
+    template_name = 'pages/wordcount.html'
+
+    def get(self, request, *args, **kwargs):
+        """Method to select record page."""
+        context = {
+            'lessons': Lesson.objects.all()
+        }
+        return render(request, self.template_name, context)
+
+
 class StatisticsPage(LoginRequiredMixin, TemplateView):
     template_name = 'pages/stats.html'
 

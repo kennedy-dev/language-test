@@ -1,0 +1,34 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="col" style="" >
+  <div class="card" style="margin: 15px; min-height: 400px">
+    <div class="card-body">
+
+        <h1 style="text-align: center">Word List</h1> <br>
+        <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Chapter</th>
+                <th>Verse</th>
+                <th>Language</th>
+                <th>Distinct Words</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for each_lesson in lessons %}
+          <tr>
+              <td>{{ each_lesson.book.title }}</td>
+              <td>{{ each_lesson.chapter.title }}</td>
+              <td>{{ each_lesson.verse.title }} </td>
+              <td>{{ each_lesson.language.title }} </td>
+              <td>{% if each_lesson.unique_words %}{{ each_lesson.unique_words }} {% endif %} </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

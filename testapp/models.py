@@ -109,6 +109,9 @@ class Lesson(models.Model):
                 .replace('?', '')
 
             if formatted_word not in self.unique_words:
-                self.unique_words += formatted_word + ' '
+                self.unique_words += formatted_word + ','
+
+        if self.unique_words:
+            self.unique_words = self.unique_words[:-1]
 
         super(Lesson, self).save(*args, **kwargs)
