@@ -241,7 +241,7 @@ class RecordPage(LoginRequiredMixin, TemplateView):
             all_unattended_lessons = list(alllessons)
 
         if len(all_unattended_lessons) == 0:
-            context['message'] = 'Congratulations! You have completed recording for this verse.'
+            context['message'] = 'Sorry! No lessons found for recording.'
 
         context['lessons'] = all_unattended_lessons
         context['total_lessons'] = alllessons.count()

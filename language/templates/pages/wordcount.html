@@ -6,24 +6,24 @@
     <div class="card-body">
 
         <h1 style="text-align: center">Word List</h1> <br>
-        <table id="example" class="display" style="width:100%">
+        <table id="example" class="display" style="width:100%;  table-layout: fixed;">
         <thead>
             <tr>
-                <th>Book</th>
-                <th>Chapter</th>
-                <th>Verse</th>
-                <th>Language</th>
-                <th>Distinct Words</th>
+                <th style="width: 10%">Book</th>
+                <th style="width: 10%">Chapter</th>
+                <th style="width: 10%">Verse</th>
+                <th style="width: 10%">Language</th>
+                <th style="width: 60%">Distinct Words</th>
             </tr>
         </thead>
         <tbody>
         {% for each_lesson in lessons %}
           <tr>
-              <td>{{ each_lesson.book.title }}</td>
-              <td>{{ each_lesson.chapter.title }}</td>
-              <td>{{ each_lesson.verse.title }} </td>
-              <td>{{ each_lesson.language.title }} </td>
-              <td>{% if each_lesson.unique_words %}{{ each_lesson.unique_words }} {% endif %} </td>
+              <td style="width: 10%">{{ each_lesson.book.title }}</td>
+              <td style="width: 10%">{{ each_lesson.chapter.title }}</td>
+              <td style="width: 10%">{{ each_lesson.verse.title }} </td>
+              <td style="width: 10%">{{ each_lesson.language.title }} </td>
+              <td style="width: 60%; word-wrap:break-word">{% if each_lesson.unique_words %}{{ each_lesson.unique_words }} {% endif %} </td>
           </tr>
         {% endfor %}
         </tbody>
