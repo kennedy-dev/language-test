@@ -132,6 +132,10 @@
             }).dataTable();;
           });
 
+          $('#selectlanguage').on('change',function () {
+              window.location.href = '/words' + '?language=' + $('#selectlanguage option:selected').val();;
+          });
+
           $('.selectclass ').on('change', function (e) {
               var selectid = this.id;
               var selectvalue = this.value;

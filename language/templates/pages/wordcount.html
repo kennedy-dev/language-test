@@ -6,13 +6,19 @@
     <div class="card-body">
 
         <h1 style="text-align: center">Word List</h1> <br>
+        <select  id="selectlanguage" style="margin-bottom: 20px; width: 100px;">
+            {% for each_language in languages %}
+              <option {% if selectedlanguage == each_language.id|stringformat:"i" %} selected {% endif %} value="{{ each_language.id }}">{{ each_language.title }}</option>
+            {% endfor %}
+        </select>
+        <a href="/csv" style="float:right;">Export to CSV</a>
+        <br/>
         <table id="example" class="display" style="width:100%;  table-layout: fixed;">
         <thead>
             <tr>
                 <th style="width: 10%">Book</th>
                 <th style="width: 10%">Chapter</th>
                 <th style="width: 10%">Verse</th>
-                <th style="width: 10%">Language</th>
                 <th style="width: 60%">Distinct Words</th>
             </tr>
         </thead>
@@ -22,7 +28,6 @@
               <td style="width: 10%">{{ each_lesson.book.title }}</td>
               <td style="width: 10%">{{ each_lesson.chapter.title }}</td>
               <td style="width: 10%">{{ each_lesson.verse.title }} </td>
-              <td style="width: 10%">{{ each_lesson.language.title }} </td>
               <td style="width: 60%; word-wrap:break-word">{% if each_lesson.unique_words %}{{ each_lesson.unique_words }} {% endif %} </td>
           </tr>
         {% endfor %}

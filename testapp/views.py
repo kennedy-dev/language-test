@@ -19,6 +19,47 @@ from django.views import View
 from bson.objectid import ObjectId
 User = get_user_model()
 from django.forms.models import model_to_dict
+import csv
+from django.http import StreamingHttpResponse
+
+
+class Echo:
+    """An object that implements just the write method of the file-like
+    interface.
+    """
+    def write(self, value):
+        """Write the value by returning it, instead of storing in a buffer."""
+        return value
+
+
+class CsvView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        """A view that streams a large CSV file."""
+        # Generate a sequence of rows. The range is based on the maximum number of
+        # rows that can be handled by a single sheet in most spreadsheet
+        # applications.
+        language = request.GET.get('language', '')
+
+        if language:
+            lessons = Lesson.objects.filter(language__id=language)
+        else:
+            lessons = Lesson.objects.all()
+        rows = [['Book', 'Chapter', 'Verse', 'Distinct Words']]
+        for each_lesson in lessons:
+            rows.append(
+                [
+                    each_lesson.book.title,
+                    each_lesson.chapter.title,
+                    each_lesson.verse.title,
+                    each_lesson.unique_words
+                ]
+            )
+        pseudo_buffer = Echo()
+        writer = csv.writer(pseudo_buffer)
+        response = StreamingHttpResponse((writer.writerow(row) for row in rows),
+                                         content_type="text/csv")
+        response['Content-Disposition'] = 'attachment; filename="words.csv"'
+        return response
 
 
 class RecordSuccessPage(LoginRequiredMixin, TemplateView):
@@ -35,8 +76,18 @@ class WordsView(LoginRequiredMixin, TemplateView):
 
     def get(self, request, *args, **kwargs):
         """Method to select record page."""
+        language = request.GET.get('language', '')
+        languages = Language.objects.all()
+
+        if language:
+            lessons = Lesson.objects.filter(language__id=language)
+        else:
+            lessons = Lesson.objects.all()
+
         context = {
-            'lessons': Lesson.objects.all()
+            'lessons': lessons,
+            'languages': languages,
+            'selectedlanguage': language
         }
         return render(request, self.template_name, context)
 
