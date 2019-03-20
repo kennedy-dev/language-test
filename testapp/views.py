@@ -22,6 +22,10 @@ from django.forms.models import model_to_dict
 import csv
 from django.http import StreamingHttpResponse
 
+# Docker code not refreshed solutions
+# https://stackoverflow.com/questions/41451211/why-does-docker-compose-build-not-reflect-my-django-code-changes
+# https://stackoverflow.com/questions/41380412/permission-issue-for-collectstatic-in-docker-compose
+
 
 class Echo:
     """An object that implements just the write method of the file-like
