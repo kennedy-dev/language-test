@@ -13,6 +13,7 @@ services:
       dockerfile: ./compose/production/django/Dockerfile
     image: language_production_django
     volumes:
+      - .:/app
       - app:/app
     depends_on:
       - postgres
