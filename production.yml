@@ -16,7 +16,7 @@ services:
     volumes:
       - .:/app
       - app:/app
-      - app:/app/media
+      - media:/app/media
 
     depends_on:
       - postgres
@@ -53,8 +53,8 @@ services:
     volumes:
       - production_caddy:/root/.caddy
       - app:/app
-      - app:/app/media
-      
+      - media:/app/media
+
     env_file:
       - ./.envs/.production/.caddy
     ports:
