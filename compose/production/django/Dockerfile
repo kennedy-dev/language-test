@@ -45,7 +45,7 @@ RUN chmod +x /start-flower
 COPY . /app
 
 RUN chown -R django /app
-RUN mkdir /app/static && chown -R django /app/static
+RUN chown -R django /app/static
 RUN mkdir /app/media && chown -R django /app/media
 
 USER django
