@@ -281,4 +281,3 @@ SOCIALACCOUNT_ADAPTER = 'language.users.adapters.SocialAccountAdapter'
 # ------------------------------------------------------------------------------
 LOGIN_REDIRECT_URL = '/record/'
 ACCOUNT_LOGOUT_ON_GET = True
-

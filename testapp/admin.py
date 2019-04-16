@@ -17,8 +17,16 @@ class LanguageAdmin(admin.ModelAdmin):
 admin.site.register(Book)
 admin.site.register(Chapter)
 admin.site.register(Verse)
-admin.site.register(Lesson)
 
+@admin.register(Lesson)
+class LessonAdmin(admin.ModelAdmin):
+    change_form_template = "admin/lesson_change_form.html"
+
+    class Media:
+        js = (
+            "//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js",
+            "js/loadbdata.js",
+        )
 
 from django.contrib.auth.models import Group
 from allauth.account.models import EmailAddress

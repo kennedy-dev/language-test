@@ -23,7 +23,7 @@
             <tr>
                 <td>{{ each_record.user_data.name }}</td>
                 <td>{{ each_record.user_data.username }}</td>
-                <td>{{ each_record.book.title }} {{ each_record.chapter.title }}</td>
+                <td>{{ each_record.book.title }} - {{ each_record.chapter.title }} - {{ each_record.verse.title }} </td>
                 <td>
                     <audio controls="" src="/media/userdata/{{ each_record.user_data.userid }}/{{ each_record.recordname }}">
                     </audio>

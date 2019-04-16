@@ -21,6 +21,8 @@ User = get_user_model()
 from django.forms.models import model_to_dict
 import csv
 from django.http import StreamingHttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 # Docker code not refreshed solutions
 # https://stackoverflow.com/questions/41451211/why-does-docker-compose-build-not-reflect-my-django-code-changes
@@ -380,6 +382,7 @@ class RecordPage(LoginRequiredMixin, TemplateView):
 
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class DataView(View):
 
     def post(self,request, *args, **kwargs):
