@@ -17,7 +17,7 @@ services:
       - .:/app
       - app:/app
       - media:/app/media
-
+      - static:/app/static
     depends_on:
       - postgres
     env_file:
@@ -54,7 +54,7 @@ services:
       - production_caddy:/root/.caddy
       - app:/app
       - media:/app/media
-
+      - static:/app/static
     env_file:
       - ./.envs/.production/.caddy
     ports:
