@@ -46,7 +46,7 @@ COPY . /app
 
 RUN chown -R django /app
 RUN chown -R django /app/static
-RUN mkdir /app/media && chown -R django /app/media
+RUN chown -R django /app/media
 
 USER django
 
