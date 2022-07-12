@@ -62,7 +62,7 @@ Instructions
 
 1. Clone the repository
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    $ git clone https://github.com/bhanduroshan/language-test.git
+    $ git clone https://github.com/kennedy-dev/language-test
 
 2. Move to the survey directory
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
