@@ -15,7 +15,6 @@ services:
       dockerfile: ./compose/production/django/Dockerfile
     image: language_production_django
     volumes:
-      - .:/app
       - app:/app
       - media:/app/media
       - static:/app/static
